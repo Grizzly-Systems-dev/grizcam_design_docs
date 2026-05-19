@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <title>GrizCam Portal · UI Kit</title>
+  <link rel="stylesheet" href="../../colors_and_type.css" />
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); }
+    #root { height: 100vh; }
+    /* In dark, --bg-inset collapses onto --bg. Reintroduce a small raise. */
+    [data-theme="dark"] { --bg-inset: #221f19; }
+    @keyframes grzPulse {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(217,158,48,0.18); }
+      50%      { box-shadow: 0 0 0 7px rgba(217,158,48,0.05); }
+    }
+  </style>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" src="./Primitives.jsx"></script>
+  <script type="text/babel" src="./Shell.jsx"></script>
+  <script type="text/babel" src="./MapView.jsx"></script>
+  <script type="text/babel" src="./EventsView.jsx"></script>
+  <script type="text/babel" src="./EventDetail.jsx"></script>
+  <script type="text/babel" src="./CameraGrid.jsx"></script>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function App() {
+      const [view, setView] = useState('map');
+      const [eventId, setEventId] = useState(null);
+
+      const titles = {
+        map:      ['Map',     'Operator Console · Live'],
+        events:   ['Events',  'Detection Feed · Last 48 Hours'],
+        cameras:  ['Cameras', 'Field Hardware'],
+        alerts:   ['Alerts',  'Acknowledgements · Routing'],
+        settings: ['Settings','Account · Devices · Routing'],
+        detail:   ['Event detail', 'Forensic record'],
+      };
+
+      const onOpenEvent = id => { setEventId(id); setView('detail'); };
+      const onBack = () => setView('events');
+      const titleKey = view;
+      const [subtitle, title] = titles[titleKey] || titles.map;
+
+      return (
+        <Shell active={view === 'detail' ? 'events' : view} onNav={setView} title={title} subtitle={subtitle}>
+          {view === 'map'      && <MapView onOpenEvent={onOpenEvent} />}
+          {view === 'events'   && <EventsView onOpenEvent={onOpenEvent} />}
+          {view === 'cameras'  && <CameraGrid />}
+          {view === 'alerts'   && <EventsView onOpenEvent={onOpenEvent} />}
+          {view === 'settings' && <CameraGrid />}
+          {view === 'detail'   && <EventDetail id={eventId} onBack={onBack} />}
+        </Shell>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
