@@ -27,7 +27,7 @@ Start by opening `reference/<kit>/index.html` to see the composition, then walk 
 
 1. **Five colors, ever.** The system is `pitch-black` `taupe` `bone` `floral-white` `goldenrod`. Do not introduce error reds, success greens, secondary palettes, or chart colors. Status conveys via tone, not hue.
 2. **Goldenrod once per view.** The accent is rationed. If two goldenrod elements appear on a screen, one of them is wrong.
-3. **No shadows.** Elevation comes from a 1px border on a slightly different surface. In dark, taupe rises on pitch-black.
+3. **Elevation: a 1px border, or a tasteful drop-shadow.** The default is a 1px border on a slightly different surface (in dark, taupe rises on pitch-black). **Drop-shadows are also permitted** for genuine elevation (dialogs, panels, toasts) where a flat border reads wrong — subtle and functional, never decorative. *(Updated 2026-07-05 — Jeff, design owner: the prior "No shadows" rule is lifted ecosystem-wide. Borders, shadows, or both are valid.)*
 4. **No emoji. No exclamation points.** This applies to UI copy, error states, success toasts, everything.
 5. **Mono for telemetry only.** Coordinates, timestamps, IDs, part numbers. Body copy is Source Serif Pro. UI labels are Inter Tight.
 6. **120ms ease, opacity + transform only.** Never animate color (goldenrod is too saturated to fade through).
