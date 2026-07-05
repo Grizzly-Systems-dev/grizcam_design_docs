@@ -32,6 +32,7 @@ Start by opening `reference/<kit>/index.html` to see the composition, then walk 
 5. **Mono for telemetry only.** Coordinates, timestamps, IDs, part numbers. Body copy is Source Serif Pro. UI labels are Inter Tight.
 6. **120ms ease, opacity + transform only.** Never animate color (goldenrod is too saturated to fade through).
 7. **Borders are first-class.** 1px default, 1.5px on focused inputs (with padding compensation), 3px on callout left edges. That's the entire border-width vocabulary.
+8. **Dialog footers — affirmative right-most, equal-size peers.** *(Added 2026-07-05 — pioneered by `grizcam_desktop`, ratified ecosystem-wide.)* The **affirmative / forward** action (Save · OK · Apply · Confirm · Add · Delete) is the **right-most** footer button; Cancel / secondary sits immediately to its **left**; the footer is right-aligned (`justify-content: flex-end`, so **DOM order = visual order** — Cancel's markup comes first). This is the cross-industry standard (Apple HIG, Material, GNOME); the primary-left / Cancel-right layout is the abandoned Windows-XP order — do not use it. **Every footer button in a dialog is an equal-size peer:** one shared box (`box-sizing: border-box`, `min-width: 84px`, identical padding) so button *text length never changes button width*.
 
 ## Theme switching
 
@@ -40,6 +41,8 @@ Light is default. Dark is contextual — apply via `data-theme="dark"` on `<html
 ## Webfonts
 
 `tokens/colors_and_type.css` loads Inter Tight, Source Serif Pro (Source Serif 4 from Google as the closest available), and JetBrains Mono from Google Fonts. If your codebase has a font-loading strategy, port to that — but **preserve the family / weight / fallback chain exactly**.
+
+**Offline / CSP / frozen (desktop-class) apps MUST bundle + inline the fonts — never a CDN.** *(Added 2026-07-05 — pioneered by `grizcam_desktop`.)* Web apps (portal, operations, website, OSCAR) load from Google Fonts or a local mirror of `tokens/`. But an app that runs **offline** or under a **strict CSP** (a frozen desktop/mobile build) **cannot** reach a CDN: bundle the **OFL latin-subset `woff2`** locally and **inline them as `data:` URIs** in the `@font-face` — CSP-safe, no network, path-independent across OS layouts (Windows `_internal/` vs macOS `.app/…/Resources/`); a missing file simply no-ops the `@font-face` so the **system-font fallback stack** takes over. Keep the family / weight / fallback chain **exactly**. Reference impl: `grizcam_desktop` (`assets/fonts/` + `docs/FONTS.md`; `--gs-font-*` vars for a one-place family swap). *(Hosting the canonical OFL `woff2` bytes here in `grizcam_design_docs`, so every app mirrors the same files, is a proposed follow-up.)*
 
 ## Iconography
 
